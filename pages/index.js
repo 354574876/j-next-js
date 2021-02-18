@@ -24,6 +24,7 @@ import {
   ModalFooter,
   FormControl,
   FormLabel,
+  ChakraProvider,
 } from '@chakra-ui/react'
 import { css, jsx } from '@emotion/react'
 import { AiOutlineSearch, AiOutlinePlus } from 'react-icons/ai'
@@ -48,19 +49,14 @@ const AvatarCss = css`
   border-radius: 50px;
   background-color: #f3f3f3;
   text-align: center;
-  line-height: 50px;
+  line-height: 45px;
   display: inline-block;
   cursor: pointer;
+  svg {
+    display: inline-block;
+  }
 `
 export default function Home() {
-  const data = [
-    { name: 'GitHub', path: 'https://github.com' },
-    { name: 'GitHub', path: 'https://github.com' },
-    { name: 'GitHub', path: 'https://github.com' },
-    { name: 'GitHub', path: 'https://github.com' },
-    { name: 'GitHub', path: 'https://github.com' },
-    { name: 'GitHub', path: 'https://github.com' },
-  ]
   const [collectList, setCollectList] = useState([])
   const [name, setName] = useState('')
   const [path, setPath] = useState('')
@@ -69,15 +65,17 @@ export default function Home() {
   const initialRef = React.useRef()
   const finalRef = React.useRef()
   const addList = () => {
-    setCollectList(
-      collectList.push({
-        name,
-        path,
-      })
-    )
+    collectList.push({
+      name,
+      path,
+    })
+    setCollectList([...collectList])
+    onClose()
+    setName('')
+    setPath('')
   }
   return (
-    <div className={styles.container}>
+    <ChakraProvider className={styles.container}>
       <Head>
         <title>Google</title>
         <link rel="icon" href="/favicon.ico" />
@@ -90,30 +88,29 @@ export default function Home() {
           <InputGroup>
             <InputLeftElement
               pointerEvents="none"
-              left="17px"
-              top="14px"
               color="#9aa0a6"
               fontSize="18px"
               children={<AiOutlineSearch />}
             />
-            <Input type="text" css={InputCss} />
+            <Input type="text" />
           </InputGroup>
         </Flex>
         <Flex mt="20px" flexWrap="wrap">
-          {data.map(item => (
+          {collectList.map((item, idx) => (
             <Box
-              key={item.path}
+              key={idx}
               href={item.path}
               w="100px"
               textAlign="center"
               flexShrink="0"
             >
-              <Box css={AvatarCss}>
+              <Box h="50px">
                 <Link href={item.path} isExternal>
                   <Avatar
                     src={`${item.path}/favicon.ico`}
                     p="10px"
                     maxH="50px"
+                    backgroundColor="#f3f3f3"
                   />
                 </Link>
               </Box>
@@ -159,13 +156,13 @@ export default function Home() {
             </FormControl>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="blue" mr={3}>
+            <Button colorScheme="blue" mr={3} onClick={addList}>
               完成
             </Button>
             <Button onClick={onClose}>取消</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </div>
+    </ChakraProvider>
   )
 }
