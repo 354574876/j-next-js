@@ -1,0 +1,9 @@
+{
+  "apps": [
+    {
+      "name": "NextJs",
+      "script": "yarn",
+      "args": "start"
+    }
+  ]
+}
